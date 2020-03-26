@@ -13,7 +13,6 @@ public class OneDimensionalMaze : MonoBehaviour {
     public Material[] color;
     public KMSelectable Ball;
 
-    //Logging
     static int moduleIdCounter = 1;
     int moduleId;
     private bool moduleSolved;
@@ -24,6 +23,7 @@ public class OneDimensionalMaze : MonoBehaviour {
     int You = 0;
     int Fuck = 0;
     int Submit = 0;
+    private List<float> fuckery = new List<float> {0.26666f, 0.13333f, 0.06666f, 0.03333f,.01667f,.008335f};
 
     void Awake () {
         GetComponent<KMBombModule>().OnActivate += Activate;
@@ -33,8 +33,6 @@ public class OneDimensionalMaze : MonoBehaviour {
                 }
                 Ball.OnInteract += delegate () { PressBall(); return false; };
     }
-    
-    // Use this for initialization
     void Start () {
       SN = Bomb.GetSerialNumber();
       Callitsomethingyoucanremember = (int)Char.GetNumericValue(SN[5]);
@@ -44,7 +42,7 @@ public class OneDimensionalMaze : MonoBehaviour {
       Ball.GetComponent<MeshRenderer>().material = color[Fuck];
       Debug.LogFormat("[1D Maze #{0}] You started at cell {1}.",moduleId,(You));
 	}
-    
+
   void ButtonPress(KMSelectable Button){
     if (moduleSolved) {
       return;
@@ -76,7 +74,7 @@ public class OneDimensionalMaze : MonoBehaviour {
       Debug.Log(You);
     }
   }
-  
+
   void PressBall(){
         Ball.AddInteractionPunch();
         GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
@@ -101,20 +99,19 @@ public class OneDimensionalMaze : MonoBehaviour {
         	}
         }
     }
-
     void Activate(){
       Audio.PlaySoundAtTransform("Activate", transform);
     }
 
     IEnumerator congratsshitlet () {
-        for (int j = 6; j > 0; j--) {
-            for (int k = 0; k < 7-j; k++) {
-                Ball.GetComponent<MeshRenderer>().material = color[0];
-                yield return new WaitForSeconds(.01666f*(Math.Pow(2, j)));
-                Ball.GetComponent<MeshRenderer>().material = color[1];
-                yield return new WaitForSeconds(.01666f*(Math.Pow(2, j)));
+            for (int j = 0; j < 6; j++) {
+                for (int k = 0; k < 7-j; k++) {
+                    Ball.GetComponent<MeshRenderer>().material = color[0];
+                    yield return new WaitForSeconds(fuckery[j]);
+                    Ball.GetComponent<MeshRenderer>().material = color[1];
+                    yield return new WaitForSeconds(fuckery[j]);
+                }
             }
+            Ball.GetComponent<MeshRenderer>().material = color[2];
         }
-        Ball.GetComponent<MeshRenderer>().material = color[2];
-    }
 }
