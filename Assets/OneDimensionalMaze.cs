@@ -49,29 +49,23 @@ public class OneDimensionalMaze : MonoBehaviour {
     }
     Button.AddInteractionPunch();
     GetComponent<KMAudio>().PlayGameSoundAtTransform(KMSoundOverride.SoundEffect.ButtonPress, transform);
-    if (Button == Buttons[0]) {
+    if (Button == Buttons[1]) {
       if (You == 79) {
         You = 0;
       }
       else {
         You += 1;
       }
-      Debug.Log(You);
       Ball.GetComponent<MeshRenderer>().material = color[Position[You]];
     }
-    else if (Button == Buttons[1] && moduleSolved == false) {
+    else if (Button == Buttons[0]) {
       if (You == 0) {
         You = 79;
       }
       else {
         You -= 1;
       }
-      Debug.Log(You);
       Ball.GetComponent<MeshRenderer>().material = color[Position[You]];
-    }
-    else{
-      Debug.Log("FUUUCK");
-      Debug.Log(You);
     }
   }
 
@@ -85,7 +79,7 @@ public class OneDimensionalMaze : MonoBehaviour {
         	if (Callitsomethingyoucanremember == i) {
         		if (You % 10 == i) {
         			  GetComponent<KMBombModule>().HandlePass();
-        			  Debug.LogFormat("[1D Maze #{0}] You submitted at {1}. Module disarmed.",moduleId,(You));
+        			  Debug.LogFormat("[1D Maze #{0}] You submitted at {1}. Module disarmed.",moduleId,You);
         			  Audio.PlaySoundAtTransform("Farfare", transform);
         			  moduleSolved = true;
         			  Ball.GetComponent<MeshRenderer>().material = color[2];
@@ -93,7 +87,7 @@ public class OneDimensionalMaze : MonoBehaviour {
         			}
         			else {
         			  GetComponent<KMBombModule>().HandleStrike();
-        			  Debug.LogFormat("[1D Maze #{0}] You submitted at {1}. Strike, poopyhead.",moduleId,(You));
+        			  Debug.LogFormat("[1D Maze #{0}] You submitted at {1}. Strike, poopyhead.",moduleId,You);
         			  Ball.GetComponent<MeshRenderer>().material = color[3];
         		}
         	}
