@@ -19,7 +19,7 @@ public class OneDimensionalMaze : MonoBehaviour {
     private bool moduleSolved;
     static int onedCounter = 1;
     int onedID;
-    private List<int> Position = new List<int> {1,1,1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,0,0,1,1,0,1,0,0,1,0,1,0,0,1,0,0,0,1,1,0,0,1,1,0,0,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,1,1,1,1,1,0,0,1,1,0,0,0,0,1,1,1,0,0,1,0,1,0,0};
+    private List<int> Position = new List<int> {1,1,1,1,0,1,1,0,0,1,1,1,0,1,0,0,1,0,0,1,1,0,1,0,0,1,0,1,0,0,1,0,0,0,1,1,0,0,1,1,0,0,0,1,0,1,0,1,0,1,0,1,0,1,1,0,1,1,0,1,1,1,0,0,1,1,0,0,0,1,1,1,1,0,0,1,0,1,0,0};
     int StartingWeed = 0;
     string SN = "FATASSANSWERCONFIRMCONFIRMANSWERGUCCI";
     int Callitsomethingyoucanremember = -1;
@@ -152,7 +152,7 @@ public class OneDimensionalMaze : MonoBehaviour {
         if (Regex.IsMatch(command, @"^\s*press down\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant) || Regex.IsMatch(command, @"^\s*down\s*$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant))
         {
             yield return null;
-            Buttons[0].OnInteract();
+            Buttons[1].OnInteract();
             yield break;
         }
         if (command.StartsWith("press up ") || command.StartsWith("up "))
@@ -183,7 +183,7 @@ public class OneDimensionalMaze : MonoBehaviour {
             }
             else
             {
-                yield return "sendtochaterror The specified number of times to press the up arrow " + command.Substring(8).Trim() + " is invalid!";
+              yield return "sendtochaterror The specified number of times to press the up arrow '" + command.Substring(start).Trim() + "' is invalid!";
             }
             yield break;
         }
@@ -215,7 +215,7 @@ public class OneDimensionalMaze : MonoBehaviour {
             }
             else
             {
-                yield return "sendtochaterror The specified number of times to press the down arrow " + command.Substring(8).Trim() + " is invalid!";
+              yield return "sendtochaterror The specified number of times to press the down arrow '" + command.Substring(start).Trim() + "' is invalid!";
             }
             yield break;
         }
@@ -231,17 +231,17 @@ public class OneDimensionalMaze : MonoBehaviour {
             while (Math.Abs(You - back) % 10 != Callitsomethingyoucanremember) { back++; }
             if (forward > back)
             {
-                for (int i = 0; i < forward; i++)
+                while (You % 10 != Callitsomethingyoucanremember)
                 {
-                    Buttons[1].OnInteract();
+                    Buttons[0].OnInteract();
                     yield return new WaitForSeconds(0.1f);
                 }
             }
             else if (back > forward)
             {
-                for (int i = 0; i < back; i++)
+                while (You % 10 != Callitsomethingyoucanremember)
                 {
-                    Buttons[0].OnInteract();
+                    Buttons[1].OnInteract();
                     yield return new WaitForSeconds(0.1f);
                 }
             }
