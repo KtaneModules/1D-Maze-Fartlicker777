@@ -17,7 +17,7 @@ MonoBehaviour:
   description: "Let\u2019s take this to a previous dimension.\r\n\r\nNavigate a maze
     that goes in only one direction, and submit at any correct spot.\n\nManual can
     be found at ktane.timwi.de or in the manuals folder of your game.\r\n\nIf there
-    are any bugs, contact Fartlicker777#9169 on Discord.\r\n"
+    are any bugs, contact Fartlicker777#9169 on Discord.\r"
   version: 1.0
   outputFolder: build
   previewImage: {fileID: 2800000, guid: d0ae10c124fdcc44b80225f36e6ad5f2, type: 3}
