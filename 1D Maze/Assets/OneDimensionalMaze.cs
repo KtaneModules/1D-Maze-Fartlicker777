@@ -147,10 +147,10 @@ public class OneDimensionalMaze : MonoBehaviour {
          Buttons[1].OnInteract();
          yield break;
       }
-      if (command.StartsWith("press up ") || command.StartsWith("up ")) {
+      if (command.ToLower().StartsWith("press up ") || command.ToLower().StartsWith("up ")) {
          yield return null;
          int start = 0;
-         if (command.StartsWith("press up ")) {
+         if (command.ToLower().StartsWith("press up ")) {
             start = 8;
          }
          else {
@@ -168,14 +168,14 @@ public class OneDimensionalMaze : MonoBehaviour {
             }
          }
          else {
-            yield return "sendtochaterror The specified number of times to press the up arrow '" + command.Substring(start).Trim() + "' is invalid!";
+            yield return "sendtochaterror!f The specified number of times to press the up arrow '" + command.Substring(start).Trim() + "' is invalid!";
          }
          yield break;
       }
-      if (command.StartsWith("press down ") || command.StartsWith("down ")) {
+      if (command.ToLower().StartsWith("press down ") || command.ToLower().StartsWith("down ")) {
          yield return null;
          int start = 0;
-         if (command.StartsWith("press down ")) {
+         if (command.ToLower().StartsWith("press down ")) {
             start = 10;
          }
          else {
@@ -193,7 +193,7 @@ public class OneDimensionalMaze : MonoBehaviour {
             }
          }
          else {
-            yield return "sendtochaterror The specified number of times to press the down arrow '" + command.Substring(start).Trim() + "' is invalid!";
+            yield return "sendtochaterror!f The specified number of times to press the down arrow '" + command.Substring(start).Trim() + "' is invalid!";
          }
          yield break;
       }
