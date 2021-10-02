@@ -5,6 +5,7 @@ using System.Linq;
 using UnityEngine;
 using KModkit;
 using System.Text.RegularExpressions;
+using System.Reflection;
 
 public class OneDimensionalMaze : MonoBehaviour {
 
@@ -41,6 +42,7 @@ public class OneDimensionalMaze : MonoBehaviour {
       }
       Ball.OnInteract += delegate () { PressBall(); return false; };
    }
+
    void Start () {
       SN = Bomb.GetSerialNumber();
       CorrectRow = (int) Char.GetNumericValue(SN[5]);
@@ -96,6 +98,9 @@ public class OneDimensionalMaze : MonoBehaviour {
       }
    }
    void Activate () {
+      if (GetMissionID() == "mod_TheFortySevenButAwesome_The 47") {
+         return;
+      }
       if (onedID == 1) {
          Audio.PlaySoundAtTransform("Activate", transform);
       }
@@ -125,6 +130,19 @@ public class OneDimensionalMaze : MonoBehaviour {
       yield return new WaitForSeconds(1f);
       Ball.GetComponent<MeshRenderer>().material = color[Position[CurrentPosition]];
       striking = false;
+   }
+
+   private string GetMissionID () {
+      try {
+         Component gameplayState = GameObject.Find("GameplayState(Clone)").GetComponent("GameplayState");
+         Type type = gameplayState.GetType();
+         FieldInfo fieldMission = type.GetField("MissionToLoad", BindingFlags.Public | BindingFlags.Static);
+         return fieldMission.GetValue(gameplayState).ToString();
+      }
+
+      catch (NullReferenceException) {
+         return "undefined";
+      }
    }
 
    //twitch plays
