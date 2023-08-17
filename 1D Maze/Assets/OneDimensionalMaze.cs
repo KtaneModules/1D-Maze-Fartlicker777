@@ -188,6 +188,7 @@ public class OneDimensionalMaze : MonoBehaviour {
 
                 for (int i = 0; i < temp; i++)
                 {
+                    yield return null;
                     Buttons[buttonIndex].OnInteract();
                     yield return new WaitForSeconds(delay);
                 }
