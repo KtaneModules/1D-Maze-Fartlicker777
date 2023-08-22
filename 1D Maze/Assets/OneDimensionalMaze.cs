@@ -149,104 +149,76 @@ public class OneDimensionalMaze : MonoBehaviour {
 #pragma warning disable 414
    private readonly string TwitchHelpMessage = @"!{0} (press) up/down [#] {Press the up or down arrow (optionally '#' times)} [slow] {slows each button press down} | !{0} submit [Presses the LED]";
 #pragma warning restore 414
-    IEnumerator ProcessTwitchCommand(string command)
-    {
-        Regex regex = new Regex(@"^(?:(?:press )?(up|down) (\d+)( slow)?|submit|(?:press )?up|(?:press )?down)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
-        Match match = regex.Match(command);
+   IEnumerator ProcessTwitchCommand (string command) {
+      Regex regex = new Regex(@"^(?:(?:press )?(up|down) (\d+)( slow)?|submit|(?:press )?up|(?:press )?down)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
+      Match match = regex.Match(command);
 
-        if (match.Success)
-        {
-            if (match.Groups[0].Value.Equals("submit", StringComparison.OrdinalIgnoreCase))
-            {
-                yield return null;
-                Ball.OnInteract();
-                yield break;
+      if (match.Success) {
+         if (match.Groups[0].Value.Equals("submit", StringComparison.OrdinalIgnoreCase)) {
+            yield return null;
+            Ball.OnInteract();
+            yield break;
+         }
+
+         string direction = match.Groups[1].Value;
+         int temp;
+
+         if (int.TryParse(match.Groups[2].Value, out temp)) {
+            if (temp < 1 || temp > 79) {
+               yield return "sendtochaterror The specified number of times to press the " + direction + " arrow " + temp + " is out of range 1-79!";
+               yield break;
             }
 
-            string direction = match.Groups[1].Value;
-            int temp;
+            // Default speed
+            float delay = 0.1f;
 
-            if (int.TryParse(match.Groups[2].Value, out temp))
-            {
-                if (temp < 1 || temp > 79)
-                {
-                    yield return "sendtochaterror The specified number of times to press the " + direction + " arrow " + temp + " is out of range 1-79!";
-                    yield break;
-                }
-
-                // Default speed
-                float delay = 0.1f;
-
-                // If slow is mentioned, slow it down.
-                if (match.Groups[3].Success)
-                {
-                    delay = 0.6f;
-                }
-
-                // Determine which button to press based on the command.
-                int buttonIndex = direction == "up" ? 0 : 1;
-
-                for (int i = 0; i < temp; i++)
-                {
-                    yield return null;
-                    Buttons[buttonIndex].OnInteract();
-                    yield return new WaitForSeconds(delay);
-                }
+            // If slow is mentioned, slow it down.
+            if (match.Groups[3].Success) {
+               delay = 0.6f;
             }
-            else
-            {
-                // Since we've simplified the pattern, we can now check the entire matched command directly.
-                switch (match.Value.ToLower())
-                {
-                    case "press up":
-                    case "up":
-                        yield return null;
-                        Buttons[0].OnInteract();
-                        yield break;
-                    case "press down":
-                    case "down":
-                        yield return null;
-                        Buttons[1].OnInteract();
-                        yield break;
-                }
-            }
-        }
-    }
 
-    IEnumerator TwitchHandleForcedSolve()
-    {
-        if (CurrentPosition % 10 != CorrectRow)
-        {
-            int forward = 0;
-            int back = 0;
-            while ((CurrentPosition + forward) % 10 != CorrectRow) { forward++; }
-            while (Math.Abs(CurrentPosition - back) % 10 != CorrectRow) { back++; }
-            if (forward > back)
-            {
-                while (CurrentPosition % 10 != CorrectRow)
-                {
-                    Buttons[0].OnInteract();
-                    yield return new WaitForSeconds(0.1f);
-                }
+            // Determine which button to press based on the command.
+            int buttonIndex = direction == "up" ? 0 : 1;
+
+            for (int i = 0; i < temp; i++) {
+               yield return null;
+               Buttons[buttonIndex].OnInteract();
+               yield return new WaitForSeconds(delay);
             }
-            else if (back > forward)
-            {
-                while (CurrentPosition % 10 != CorrectRow)
-                {
-                    Buttons[1].OnInteract();
-                    yield return new WaitForSeconds(0.1f);
-                }
+         }
+         else {
+            // Since we've simplified the pattern, we can now check the entire matched command directly.
+            switch (match.Value.ToLower()) {
+               case "press up":
+               case "up":
+                  yield return null;
+                  Buttons[0].OnInteract();
+                  yield break;
+               case "press down":
+               case "down":
+                  yield return null;
+                  Buttons[1].OnInteract();
+                  yield break;
             }
-            else
-            {
-                int rando = UnityEngine.Random.Range(0, 2);
-                for (int i = 0; i < forward; i++)
-                {
-                    Buttons[rando].OnInteract();
-                    yield return new WaitForSeconds(0.1f);
-                }
-            }
-        }
-        Ball.OnInteract();
-    }
+         }
+      }
+   }
+
+   IEnumerator TwitchHandleForcedSolve () {
+      if (CurrentPosition % 10 != CorrectRow) {
+         int Button = 0;
+         int Dif = CorrectRow % 10 - CurrentPosition % 10;
+         if ((Dif < 5 && Dif > 0) || (Dif < -5)) {
+            Button = 1;
+         }
+         if (Dif == 5 || Dif == -5) {
+            Button = UnityEngine.Random.Range(0, 2);
+         }
+         while (CurrentPosition % 10 != CorrectRow) {
+            Buttons[Button].OnInteract();
+            yield return new WaitForSeconds(0.1f);
+         }
+      }
+      Ball.OnInteract();
+   }
 }
