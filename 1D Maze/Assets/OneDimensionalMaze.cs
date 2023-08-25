@@ -147,7 +147,7 @@ public class OneDimensionalMaze : MonoBehaviour {
 
    //twitch plays
 #pragma warning disable 414
-   private readonly string TwitchHelpMessage = @"!{0} (press) up/down [#] {Press the up or down arrow (optionally '#' times)} [slow] {slows each button press down} | !{0} submit [Presses the LED]";
+   private readonly string TwitchHelpMessage = @"!{0} [press] up/down [#] (Press the up or down arrow (optionally '#' times)) [slow] (slows each button press down) | !{0} submit (Presses the LED)";
 #pragma warning restore 414
    IEnumerator ProcessTwitchCommand (string command) {
       Regex regex = new Regex(@"^(?:(?:press )?(up|down) (\d+)( slow)?|submit|(?:press )?up|(?:press )?down)$", RegexOptions.IgnoreCase | RegexOptions.CultureInvariant);
@@ -165,7 +165,7 @@ public class OneDimensionalMaze : MonoBehaviour {
 
          if (int.TryParse(match.Groups[2].Value, out temp)) {
             if (temp < 1 || temp > 79) {
-               yield return "sendtochaterror The specified number of times to press the " + direction + " arrow " + temp + " is out of range 1-79!";
+               yield return "sendtochaterror The specified number of times to press the " + direction + " arrow " + temp + " times is out of the acceptable range of 1-79!";
                yield break;
             }
 
@@ -174,7 +174,7 @@ public class OneDimensionalMaze : MonoBehaviour {
 
             // If slow is mentioned, slow it down.
             if (match.Groups[3].Success) {
-               delay = 0.6f;
+               delay = 0.8f;
             }
 
             // Determine which button to press based on the command.
